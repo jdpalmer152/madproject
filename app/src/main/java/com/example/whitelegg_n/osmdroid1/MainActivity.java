@@ -45,6 +45,20 @@ public class MainActivity extends Activity
             //react to the menu item being selected...
             return true;
         }
+        if(item.getItemId() == R.id.setLocation)
+        {
+            Intent intent = new Intent(this, SetLocationActivity.class);
+            startActivityForResult(intent, 1);
+
+            return true;
+        }
+        if(item.getItemId() == R.id.choosemapstyle)
+        {
+            Intent intent = new Intent(this, MapTypeListactivity.class);
+            startActivityForResult(intent,0);
+
+            return true;
+        }
         return false;
     }
     protected void onActivityResult(int requestCode,int resultCode, Intent intent)
@@ -60,6 +74,16 @@ public class MainActivity extends Activity
             else
             {
                 mv.setTileSource(TileSourceFactory.MAPNIK);
+            }
+        }elseif (requestCode == 1)
+        {
+            if (resonseCode == RESULT_OK)
+            {
+                Bundle latlongbundle = intent.getExtras();
+                double latitude = latlongBundle.getDouble("com.whitelegg_n.latitude");
+                double longitude = latlongBundle.getDouble("com.whitelegg_n.longitude");
+
+                mv.getController().setCenter(new GeoPoint(longitude, latitude));
             }
         }
     }
