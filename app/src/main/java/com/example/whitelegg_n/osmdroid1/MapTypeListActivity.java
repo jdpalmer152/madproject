@@ -23,8 +23,8 @@ public class MapTypeListActivity extends ListActivity
             super.onCreate(savedInstanceState);
             data = new String[] { "Regular Map", "Cycle Map"};
 
-            MyAdapter browseradapter = new MyAdapter();
-            setListAdapter(browseradapter);
+           // MyAdapter browseradapter = new MyAdapter();
+          //  setListAdapter(browseradapter);
         }
 
         public void onListItemClick(ListView lv, View view, int index, long id)
@@ -44,6 +44,7 @@ public class MapTypeListActivity extends ListActivity
             finish();
         }
 
+        /*
         class MyAdapter extends ArrayAdapter<String>
         {
 
@@ -67,4 +68,5 @@ public class MapTypeListActivity extends ListActivity
             }
 
         }
+        */
     }
