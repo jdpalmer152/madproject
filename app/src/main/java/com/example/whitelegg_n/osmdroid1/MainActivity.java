@@ -92,7 +92,7 @@ public class MainActivity extends Activity
         }
     }
 
-    public void onStarT()
+    public void onStart()
     {
         super.onStart();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
