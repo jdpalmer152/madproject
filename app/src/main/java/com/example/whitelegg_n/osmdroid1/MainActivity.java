@@ -72,7 +72,7 @@ public class MainActivity extends Activity
             String[] components = line.split(",");
             if(components.length==5)
             {
-                OverlayItem currentOverlayItem = new OverlayItem (name[0], type[1], description[2], longitude[3], latitude[4]);
+                OverlayItem currentOverlayItem = new OverlayItem (components[0], components[1], components[2], components[3], components[4]);
                 overlayItems.add(currentOverlayItem);
             }
         }
