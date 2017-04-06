@@ -9,19 +9,29 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.Overlay;
+import org.osmdroid.views.overlay.OverlayItem;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
 
 public class MainActivity extends Activity
 {
     MapView mv;
+    ItemizedIconOverlay<OverlayItem> items;
+    ItemizedIconOverlay.OnItemGestureListener<OverlayItem> markerGestureListener;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+
         super.onCreate(savedInstanceState);
 
         //important! set your user agent to prevent getting banned from the osm servers
@@ -31,6 +41,43 @@ public class MainActivity extends Activity
         mv = (MapView)findViewById(R.id.map1);
         mv.getController().setZoom(14);
         mv.getController().setCenter(new GeoPoint(40.1, 22.5));
+
+        markerGestureListener = new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>()
+        {
+            public boolean onItemLongPress(int i, OverlayItem item)
+            {
+                Toast.makeText(MainActivity.this, item.getSnippet(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            public boolean onItemSingleTapUp(int i, OverlayItem item)
+            {
+                Toast.makeText(MainActivity.this, item.getSnippet(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        };
+
+        items = new ItemizedIconOverlay<OverlayItem>(this, new ArrayList<OverlayItem>(), markerGestureListener);
+        OverlayItem Verwood = new OverlayItem("Verwood", "Town in East Dorset", new GeoPoint(50.88, -1.87));
+
+        OverlayItem StStephensCastle = new OverlayItem("St. Stephens Castle", "The 'Castle' is an Iron Age barrow at the top of an old sand and gravel quarry", new GeoPoint(50.88, -1.86));
+        items.addItem(Verwood);
+        items.addItem(StStephensCastle);
+        mv.getOverlays().add(items);
+
+        ArrayList<OverlayItem> overlayItems = new ArrayList<OverlayItem>();
+        BufferedReader reader = new BufferedReader(new FileReader ("poi.txt"));
+        String line;
+        while((line = reader.readLine()) != null)
+        {
+            String[] components = line.split(",");
+            if(components.length==5)
+            {
+                OverlayItem currentOverlayItem = new OverlayItem (name[0], type[1], description[2], longitude[3], latitude[4]);
+                overlayItems.add(currentOverlayItem);
+            }
+        }
+
+
     }
     public boolean onCreateOptionsMenu(Menu menu)
     {
