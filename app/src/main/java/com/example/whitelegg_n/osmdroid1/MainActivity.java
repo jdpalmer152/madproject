@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.view.Menu;
@@ -21,6 +22,7 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends Activity
@@ -65,18 +67,23 @@ public class MainActivity extends Activity
         mv.getOverlays().add(items);
 
         ArrayList<OverlayItem> overlayItems = new ArrayList<OverlayItem>();
-        BufferedReader reader = new BufferedReader(new FileReader ("poi.txt"));
-        String line;
-        while((line = reader.readLine()) != null)
-        {
-            String[] components = line.split(",");
-            if(components.length==5)
-            {
-                OverlayItem currentOverlayItem = new OverlayItem (components[0], components[1], components[2], components[3], components[4]);
-                overlayItems.add(currentOverlayItem);
+        try {
+
+            BufferedReader reader = new BufferedReader(new FileReader(Environment.getExternalStorageDirectory().getAbsolutePath() + "/poi.txt"));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] components = line.split(",");
+                if (components.length == 5) {
+                    OverlayItem currentOverlayItem = new OverlayItem(components[0], components[2], new GeoPoint(Double.parseDouble(components[4]), Double.parseDouble(components[3])));
+                    overlayItems.add(currentOverlayItem);
+                }
             }
         }
 
+        catch(IOException e)
+        {
+            System.out.println("ERROR: " + e);
+        }
 
     }
     public boolean onCreateOptionsMenu(Menu menu)
